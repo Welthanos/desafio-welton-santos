@@ -5,53 +5,43 @@ class CaixaDaLanchonete {
         {
             codigo: "cafe",
             descricao: "Café",
-            valor: 3.00,
-            principal: true
+            valor: 3.00
         },
         {
             codigo: "chantily",
             descricao: "Chantily (extra do Café)",
-            valor: 1.50,
-            principal: false,
-            relacao: "cafe"
+            valor: 1.50
         },
         {
             codigo: "suco",
             descricao: "Suco Natural",
-            valor: 6.20,
-            principal: true
+            valor: 6.20
         },
         {
             codigo: "sanduiche",
             descricao: "Sanduíche",
-            valor: 6.50,
-            principal: true
+            valor: 6.50
         },
         {
             codigo: "queijo",
             descricao: "Queijo (extra do Sanduíche)",
-            valor: 2.00,
-            principal: false,
-            relacao: "sanduiche"
+            valor: 2.00
         },
         {
             codigo: "salgado",
             descricao: "Salgado",
-            valor: 7.25,
-            principal: true
+            valor: 7.25
         },
         {
             codigo: "combo1",
             descricao: "1 Suco e 1 Sanduíche",
-            valor: 9.50,
-            principal: false
+            valor: 9.50
         },
         {
             codigo: "combo2",
             descricao: "1 Café e 1 Sanduíche",
-            valor: 7.50,
-            principal: false
-        },
+            valor: 7.50
+        }
     ];
 
     calcularValorDaCompra(metodoDePagamento, itens) {
@@ -59,9 +49,7 @@ class CaixaDaLanchonete {
 
         if (itens.length === 0) return "Não há itens no carrinho de compra!";
 
-        const itensMapeados = itens.map((item) => {
-            return item.split(",");
-        });
+        const itensMapeados = itens.map(item => item.split(","));
 
         const itensInvalidos = () => {
             let contador = 0;
@@ -75,6 +63,22 @@ class CaixaDaLanchonete {
         for (let item of itensMapeados) if (item[1] === "0") return "Quantidade inválida!";
 
         if (itensInvalidos()) return "Item inválido!";
+
+        const verificaExtra = () => {
+            let cafe = itensMapeados.filter(item => item[0] === "cafe").length >= 1 ? true : false;
+            let chantily = itensMapeados.filter(item => item[0] === "chantily").length >= 1 ? true : false;
+
+            if (chantily && !cafe) return false;
+
+            let queijo = itensMapeados.filter(item => item[0] === "queijo").length >= 1 ? true : false;
+            let sanduiche = itensMapeados.filter(item => item[0] === "sanduiche").length >= 1 ? true : false;
+
+            if (queijo && !sanduiche) return false;
+
+            return true;
+        }
+
+        if (!verificaExtra()) return "Item extra não pode ser pedido sem o principal";
 
         return "";
     }
