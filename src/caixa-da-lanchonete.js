@@ -80,7 +80,29 @@ class CaixaDaLanchonete {
 
         if (!verificaExtra()) return "Item extra não pode ser pedido sem o principal";
 
-        return "";
+        const valor = () => {
+            let total = 0;
+            for (let itemCardapio of this.cardapio) {
+                for (let itemCompra of itensMapeados) {
+
+                    if (itemCardapio.codigo === itemCompra[0]) {
+                        let calculo = itemCardapio.valor * parseInt(itemCompra[1]);
+
+                        total += calculo;
+                    }
+                }
+            }
+
+            if (metodoDePagamento === "dinheiro") total -= (total * 0.05);
+
+            if (metodoDePagamento === "credito") total += (total * 0.03);
+
+            let totalFormatado = String(total.toFixed(2)).replace(".", ",");
+
+            return `R$ ${totalFormatado}`;
+        }
+
+        return valor();
     }
 }
 
