@@ -1,5 +1,5 @@
 class CaixaDaLanchonete {
-    pagamentos = ["dinheiro", "debito", "credito"];
+    metodosDePagamento = ["dinheiro", "debito", "credito"];
 
     cardapio = [
         {
@@ -45,64 +45,69 @@ class CaixaDaLanchonete {
     ];
 
     calcularValorDaCompra(metodoDePagamento, itens) {
-        if (!this.pagamentos.includes(metodoDePagamento)) return "Forma de pagamento inválida!";
-
-        if (itens.length === 0) return "Não há itens no carrinho de compra!";
-
-        const itensMapeados = itens.map(item => item.split(","));
 
         const itensInvalidos = () => {
             let contador = 0;
-            for (let itemPedido of itensMapeados) {
-                for (let itemCardapio of this.cardapio) if (itemPedido[0] === itemCardapio.codigo) contador++;
+
+            for (let itemPedido of itensMapeados) for (let itemCardapio of this.cardapio) {
+                if (itemPedido[0] === itemCardapio.codigo) contador++;
             }
 
             return contador < itensMapeados.length ? true : false;
         }
 
-        for (let item of itensMapeados) if (item[1] === "0") return "Quantidade inválida!";
+        const itemExtraSemPrincipal = () => {  // Dessa forma ficou mais clean :)
+            let itens = { cafe: false, chantily: false, sanduiche: false, queijo: false };
 
-        if (itensInvalidos()) return "Item inválido!";
+            for (let item in itens) {
+                itens[item] = itensMapeados.filter(i => i[0] === item).length >= 1 ? true : false;
+            }
 
-        const verificaExtra = () => {
-            let cafe = itensMapeados.filter(item => item[0] === "cafe").length >= 1 ? true : false;
-            let chantily = itensMapeados.filter(item => item[0] === "chantily").length >= 1 ? true : false;
+            if (itens.chantily && !itens.cafe) return true;
+            if (itens.queijo && !itens.sanduiche) return true;
 
-            if (chantily && !cafe) return false;
-
-            let queijo = itensMapeados.filter(item => item[0] === "queijo").length >= 1 ? true : false;
-            let sanduiche = itensMapeados.filter(item => item[0] === "sanduiche").length >= 1 ? true : false;
-
-            if (queijo && !sanduiche) return false;
-
-            return true;
+            return false;
         }
 
-        if (!verificaExtra()) return "Item extra não pode ser pedido sem o principal";
-
-        const valor = () => {
+        const totalPedido = () => {
             let total = 0;
+
             for (let itemCardapio of this.cardapio) {
-                for (let itemCompra of itensMapeados) {
-
-                    if (itemCardapio.codigo === itemCompra[0]) {
-                        let calculo = itemCardapio.valor * parseInt(itemCompra[1]);
-
-                        total += calculo;
+                for (let itemPedido of itensMapeados) {
+                    if (itemCardapio.codigo === itemPedido[0]) {
+                        total += itemCardapio.valor * parseInt(itemPedido[1]);
                     }
                 }
             }
 
             if (metodoDePagamento === "dinheiro") total -= (total * 0.05);
-
             if (metodoDePagamento === "credito") total += (total * 0.03);
 
-            let totalFormatado = String(total.toFixed(2)).replace(".", ",");
+            let totalFormatado = `R$ ${total.toFixed(2)}`.replace(".", ",");
 
-            return `R$ ${totalFormatado}`;
+            return totalFormatado;
         }
 
-        return valor();
+        // Verifica a existência da forma de pagamento passado por parâmetro
+        if (!this.metodosDePagamento.includes(metodoDePagamento)) return "Forma de pagamento inválida!";
+
+        // Verifica a ocorrência de pedidos sem itens (itens => [])
+        if (itens.length === 0) return "Não há itens no carrinho de compra!";
+
+        // Separa o código do item de sua respectiva quantidade
+        const itensMapeados = itens.map(item => item.split(","));
+
+        // Verifica a ocorrência de itens com quantidade igual a 0 (zero)
+        for (let item of itensMapeados) if (item[1] === "0") return "Quantidade inválida!";
+
+        // Verifica a existência do item passado por parâmetro no cardápio
+        if (itensInvalidos()) return "Item inválido!";
+
+        // Verifica se o item extra está acompanhando o seu item principal
+        if (itemExtraSemPrincipal()) return "Item extra não pode ser pedido sem o principal";
+
+        // Retorna o valor total da compra
+        return totalPedido();
     }
 }
 
