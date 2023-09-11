@@ -56,7 +56,7 @@ class CaixaDaLanchonete {
             return contador < itensMapeados.length ? true : false;
         }
 
-        const itemExtraSemPrincipal = () => {  // Dessa forma ficou mais clean :)
+        const itemExtraSemPrincipal = () => {
             let itens = { cafe: false, chantily: false, sanduiche: false, queijo: false };
 
             for (let item in itens) {
