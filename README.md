@@ -1,8 +1,7 @@
 # CAIXA DA LANCHONETE
 
 ## O DESAFIO
-Olá! Você foi contratado para automatizar o caixa da Lanchonete da DB.
-Sua missão será construir a lógica que calcula o valor de uma compra de acordo com o cardápio, regras e descontos da Lanchonete.
+Construir a lógica que calcula o valor de uma compra de acordo com o cardápio, regras e descontos da Lanchonete.
 
 ### CARDÁPIO
 
@@ -24,8 +23,6 @@ Atualmente a Lanchonete aceita as seguintes formas de pagamento:
  - debito
  - credito
 
-O sistema deve receber essa informação como string, utilizando a grafia exatamente igual aos exemplos acima.
-
 ### DESCONTOS E TAXAS
  - Pagamento em dinheiro tem 5% de desconto
  - Pagamento a crédito tem acréscimo de 3% no valor total
@@ -39,12 +36,6 @@ O sistema deve receber essa informação como string, utilizando a grafia exatam
 - Se a quantidade de itens for zero, apresentar mensagem "Quantidade inválida!".
 - Se o código do item não existir, apresentar mensagem "Item inválido!"
 - Se a forma de pagamento não existir, apresentar mensagem "Forma de pagamento inválida!"
-
-### O CÓDIGO
-Você está recebendo uma estrutura básica para desenvolver a lógica do caixa. O arquivo principal está localizado dentro da pasta `src` e se chama `caixa-da-lanchonete.js`. Você pode desenvolver a sua lógica criando outros arquivos, métodos e até mesmo outras classes, porém o resultado deve poder ser obtido através do método `calcularValorDaCompra`.
-
-> ALERTA:
-> É importante que a estrutura básica descrita acima não seja alterada, incluindo nome e parâmetros do método. Iremos validar sua solução através destes, assim como você pode validar através dos cenários de testes já implementados em `src/caixa-da-lanchonete.test.js`.
 
 ### INSTALANDO E RODANDO NA SUA MÁQUINA
 1. Instalar o [Node](https://nodejs.org/en/)
@@ -117,3 +108,8 @@ O resultado esperado deve ser:
 ```
 "R$ 15,96"
 ```
+### TEST OUPUT
+
+O output ao utilizar o comando `npm test` para executar o arquivo `src/caixa-da-lanchonete.test.js` deve ser:
+
+![Test cases](https://github.com/Welthanos/desafio-welton-santos/raw/main/assets/tests.png)
